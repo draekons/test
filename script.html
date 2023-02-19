@@ -1,0 +1,111 @@
+<script>
+    //EJERCICIO 1
+    //El algoritmo va insertando un nuevo parentesis conforme encuentre el inicio y al encontrar el final lo elimina, si se empieza por un ) sin que existe un elemento en el arreglo causara el false
+    function validParentheses(x) {
+        //Se declara el arreglo
+        let arr = [];
+
+        //Se hace un ciclo para recorrer el string que se esta recibiendo
+        for (let i = 0; i < x.length; i++) {
+            //Si el valor es un ( entonces se agregara al arreglo arr
+            if (x[i] === '(') {
+                arr.push(x[i]);
+            } else if (x[i] === ')') { //Si el valor es un ) y arr no tiene elementos entonces forzará a terminar el ciclo y si tiene se eliminara el ultimo elemento agregado
+                if (arr.length === 0) {
+                    return false;
+                }
+                arr.pop();
+            }
+        }
+
+        return arr.length === 0;
+    }
+    /* "()"              =>  true
+    ")(()))"          =>  false
+    "("               =>  false
+    "(())((()())())"  =>  true */
+    console.log('EJERCICIO 1:', validParentheses("(())((()())())"));
+    
+    //EJERCICIO2
+    function formatDuration (seconds) {
+        //Se pone al principio la regla ya que es un caso único y el más sencillo de aplicar
+        if (seconds === 0) {
+            return "now";
+        }
+
+        //Seteamos las variables de tiempo para saber cuantos segundos tiene cada uno
+        const SECONDS_IN_MINUTE = 60;
+        const SECONDS_IN_HOUR = SECONDS_IN_MINUTE * 60;
+        const SECONDS_IN_DAY = SECONDS_IN_HOUR * 24;
+        const SECONDS_IN_YEAR = SECONDS_IN_DAY * 365;
+
+        //Usamos math.floor para redondear los valores a fin de evitar decimales y sacar cuantos años, meses, etc son en total
+        //Se saca el residuo de cada uno para tener con exactitud los segundos, por eso se hace la operación con cada una de las variables de tiempo
+        let years = Math.floor(seconds / SECONDS_IN_YEAR);
+        seconds = seconds % SECONDS_IN_YEAR;
+
+        let days = Math.floor(seconds / SECONDS_IN_DAY);
+        seconds = seconds % SECONDS_IN_DAY;
+
+        let hours = Math.floor(seconds / SECONDS_IN_HOUR);
+        seconds = seconds % SECONDS_IN_HOUR;
+
+        let minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
+        seconds = seconds % SECONDS_IN_MINUTE;
+
+        //Se declara un arreglo con el fin de que este sea el resultado que se regrese
+        let components = [];
+
+        //Condicionales para ir construyendo el resultado si contiene años, meses, etc
+        if (years > 0) {
+            components.push(years + (years === 1 ? " year" : " years"));
+        }
+
+        if (days > 0) {
+            components.push(days + (days === 1 ? " day" : " days"));
+        }
+
+        if (hours > 0) {
+            components.push(hours + (hours === 1 ? " hour" : " hours"));
+        }
+
+        if (minutes > 0) {
+            components.push(minutes + (minutes === 1 ? " minute" : " minutes"));
+        }
+
+        if (seconds > 0) {
+            components.push(seconds + (seconds === 1 ? " second" : " seconds"));
+        }
+
+        //Simple construccion para poner antes del valor final la palabra and
+        if (components.length === 1) {
+            return components[0];
+        } else if (components.length === 2) {
+            return components.join(" and ");
+        } else {
+            let lastComponent = components.pop();
+            return components.join(", ") + ", and " + lastComponent;
+        }
+    }
+    
+    console.log('EJERCICIO 2:', formatDuration(10000));
+
+    //EJERCICIO 3
+    function movie(card, ticket, perc) {
+        //Seteamos las variables que se van a utilizar
+        let totalB = card;
+        let numVisits = 0;
+        let totalTicket = 0;
+        
+        //checamos si el entero de mayor o igual del precio de la tarjeta es mayor o igual que totalA, esto se encierra en un ciclo y se terminará cuando la regla no se cumpla
+        while (Math.ceil(totalB) >= totalTicket) {
+            numVisits++; //se va a sumando una visita con cada ciclo
+            totalTicket += ticket; //se va sumando el valor del ticket a la variable total
+            totalB += ticket * Math.pow(perc, numVisits); //se multiplica el valor del ticket por el resultado de elevar exponencialmente el número de visitas por la fracción que se pago en el ticket anterior
+        }
+        
+        return numVisits; // se regresa el resultado de cuantas visitas son necesarias
+    }
+
+    console.log('EJERCICIO 3:', movie(500, 15, 0.9));
+</script>
